@@ -23,11 +23,22 @@ namespace apiGestores
         {
             services.AddControllers();
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Conexion")));
+            services.AddCors();   //--->Gestion permisos cliente
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(options =>
+            {
+                options.WithOrigins("http://localhost:3000");     //Acceso a clientes
+                options.AllowAnyMethod();
+                options.AllowAnyHeader();
+            }
+            );
+
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
